@@ -1,5 +1,5 @@
 azure-functions
-azure-functions-durable
+azure-durable-functions
 azure-identity
 azure-mgmt-containerinstance
 requests
