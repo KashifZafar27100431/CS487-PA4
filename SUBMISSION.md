@@ -253,11 +253,7 @@ Description: The reject path was verified at the validator level using an order 
 
 ## Evidence 8.1: Architecture Diagram
 
-TODO: Add the architecture diagram to the `docs/` folder and embed it here.
-
-```markdown
 ![Architecture Diagram](docs/architecture-diagram.png)
-```
 
 Description: The architecture diagram should show GitHub, App Service, Durable Function App, AKS validator, ACI report job, Blob Storage, Azure Container Registry, and the managed identity/IAM relationship used by the Function App.
 
