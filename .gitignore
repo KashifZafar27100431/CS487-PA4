@@ -7,3 +7,13 @@ venv/
 .env
 local.settings.generated.json
 npm-debug.log*
+
+# Azurite local storage/emulator files
+function-app/AzuriteConfig
+function-app/__azurite_db_*.json
+function-app/__blobstorage__/
+function-app/__queuestorage__/
+function-app/__tablestorage__/
+
+# local Azure Functions settings/secrets
+function-app/local.settings.json
