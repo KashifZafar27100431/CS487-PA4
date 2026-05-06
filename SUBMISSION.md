@@ -353,13 +353,9 @@ Another problem with plain HTTP functions is retry and failure handling. If vali
 
 ## Question 8.5: Cost Review
 
-TODO: Add the Cost Management screenshot scoped to `rg-sp26-27100431`.
-
-```markdown
 ![Cost Analysis](docs/cost-analysis.png)
-```
 
-Description: The Cost Management screenshot should show the estimated cost consumed by this PA inside the instructor subscription. Based on the services used, the most expensive resource is likely the AKS cluster because its node can continue running even when the validator is idle. ACI is cheaper for short report jobs because it only runs during report generation, while App Service and the Function App share the Basic B1 App Service Plan.
+Description: The Cost Management screenshot shows the estimated cost consumed by this PA inside the instructor subscription. Based on the services used, the most expensive resource is likely the AKS cluster because its node can continue running even when the validator is idle that is why we deleted it after the assignment was done. ACI is cheaper for short report jobs because it only runs during report generation, while App Service and the Function App share the Basic B1 App Service Plan.
 
 ## Question 8.6: Challenges Faced
 
