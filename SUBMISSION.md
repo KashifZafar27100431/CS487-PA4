@@ -231,21 +231,83 @@ Description: This screenshot shows the Function App settings used by `report_act
 
 ---
 
-# Task 7: End-to-End Pipeline (15 points)
+## Task 7: End-to-End Pipeline (15 points)
 
-## Evidence 7.1: Web App Wiring
+### Evidence 7.1: Web App Wiring
 
-![Web App Function Wiring](docs/task1-applicationsetting.png)
+![Web App Function URLs](docs/task7-envvar.png)
 
-Description: This screenshot shows `FUNCTION_START_URL` and `FUNCTION_STATUS_URL` configured on the Web App. These settings allow the frontend to start the Durable Function orchestration and poll the orchestration status URL until the workflow is completed or rejected.
+Description: This screenshot shows the Web App environment variables `FUNCTION_START_URL` and `FUNCTION_STATUS_URL` configured. These settings allow the frontend App Service to start the Durable Function orchestration and then poll the orchestration status until the workflow completes.
 
-## Evidence 7.2: Backend Wiring Completed
+---
 
-Description: The backend services were wired so that the Web App calls the Durable Function, the Durable Function calls the AKS validator through `VALIDATE_URL`, and the report activity can create ACI report jobs using the configured report settings and managed identity. The final end-to-end happy path should trace a valid order through the UI, Durable Function, AKS validator, ACI report job, and Blob Storage PDF output.
+### Evidence 7.2: Happy Path UI — Form Before Submit
 
-## Evidence 7.3: Reject Path Logic
+![Valid Order Form](docs/task7-accessablelink.png)
 
-Description: The reject path was verified at the validator level using an order with `qty: 999`, which returned `valid: false` and the reason `quantity exceeds limit`. In the full Durable Function workflow, this validation result causes the orchestrator to stop before creating a report ACI, preventing unnecessary report generation and cost for invalid orders.
+Description: This screenshot shows the live TaskFlow web app loaded from the Azure App Service URL. The form is filled with a valid order payload: order ID `E2E-VALID-001`, SKU `ABC`, and quantity `2`, which is within the allowed maximum quantity.
+
+---
+
+### Evidence 7.3: Happy Path UI — Running Status
+
+![Running Status](docs/task7-running.png)
+
+Description: This screenshot shows the TaskFlow UI after submitting the valid order. The status panel displays `Running` with an orchestration instance ID, proving that the frontend successfully called the Durable Function starter endpoint and the workflow started.
+
+---
+
+### Evidence 7.4: Happy Path UI — Completed Status
+
+![Completed Status](docs/task7-success.png)
+
+Description: This screenshot shows the valid order completing successfully. The UI displays `Completed` and provides a `View PDF Report` link, proving that the Durable Function completed the validation and report-generation workflow.
+
+---
+
+### Evidence 7.5: Durable Function Status Query
+
+![Status Query Completed](docs/task7-statusquery.png)
+
+Description: This screenshot shows the Durable Function status query output for both the valid and rejected end-to-end test cases. The valid order `E2E-VALID-001` completed successfully and returned a `report_url`, while the rejected order `E2E-REJECT-001` completed with status `rejected` and reason `quantity exceeds limit`.
+
+---
+
+### Evidence 7.6: Blob Storage PDF Output
+
+![Blob Storage Reports](docs/task7-blob.png)
+
+Description: This screenshot shows the `reports` blob container containing generated PDF files. The file `E2E-VALID-001.pdf` proves that the end-to-end valid order caused the report job to generate and upload a PDF to Azure Blob Storage.
+
+---
+
+### Evidence 7.7: ACI Participation
+
+![ACI Report Container](docs/task7-cireport.png)
+
+Description: This screenshot shows the Azure Container Instance `ci-report-test` with status `Succeeded`. It proves that the report-generation workload runs as a container job and exits after completing its work, which matches the intended one-shot ACI behavior.
+
+---
+
+### Evidence 7.8: Reject Path UI
+
+![Rejected Order UI](docs/task7-invalid.png)
+
+Description: This screenshot shows the invalid order path using order ID `E2E-REJECT-001` with quantity `999`. Since the validator rejects quantities greater than `100`, the UI correctly displays `Rejected` with the reason `quantity exceeds limit`.
+
+---
+
+### Evidence 7.9: Resource Group Overview
+
+![Resource Group Overview](docs/task7-resourcegroup.png)
+
+Description: This screenshot shows the deployed Azure resources in resource group `rg-sp26-27100431`. It includes the App Service, App Service Plan, Function App, Container Registry, Storage Account, AKS cluster, Managed Identity, and Container Instance, proving that the full TaskFlow architecture was deployed inside the assigned resource group.
+
+---
+
+### Task 7 Summary
+
+Task 7 confirms that the full TaskFlow pipeline works end to end. The Web App submits an order to the Durable Function, the Durable Function starts an orchestration, the validator accepts or rejects the order, and the valid path produces a PDF report in Blob Storage. The rejected path also works correctly because an invalid quantity returns a rejection message instead of generating a report.
 
 ---
 
